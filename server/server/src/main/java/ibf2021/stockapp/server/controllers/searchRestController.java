@@ -6,27 +6,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ibf2021.stockapp.server.services.CandleServ;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 @RestController
-@RequestMapping(path="/api/stock", produces=MediaType.APPLICATION_JSON_VALUE)
-public class stockRestController {
-  
-    private final Logger logger = LoggerFactory.getLogger(stockRestController.class);
+@RequestMapping(path="/api/search", produces=MediaType.APPLICATION_JSON_VALUE)
+public class searchRestController {
     @Autowired
     public CandleServ candleServ;
-
-    @GetMapping(path="{ticker}")
-    public ResponseEntity<String> getCandles(@PathVariable String ticker){
+    
+    @GetMapping("ticklist")
+    public ResponseEntity<String> searchTickers(@RequestParam(name = "q") String search){
         
-        logger.info("PATH VARIABLE" + ticker);
-        return candleServ.getCandles(ticker, "D");
-    }
-
+        return candleServ.getSearchResults(search);}
 }
-

@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute,ParamMap } from '@angular/router';
 import { candleService } from '../candle-service.service';
 import { candlestick } from '../Model';
 import {
@@ -20,6 +20,7 @@ export type ChartOptions = {
 };
 
 declare var google:any;
+
 @Component({
   selector: 'app-ticker',
   templateUrl: './ticker.component.html',
@@ -40,6 +41,10 @@ export class TickerComponent implements OnInit,AfterViewInit {
 
   constructor(private route:ActivatedRoute, private candleSvc:candleService) {
     //console.info(this.candlestick.time0)
+
+      //  google.charts.load('current', {'packages':['corechart']});
+      //   this.buildChart();
+
     this.chartOptions={
       series:[{
         name:"candle",
@@ -73,7 +78,8 @@ export class TickerComponent implements OnInit,AfterViewInit {
    }
    }
    ngAfterViewInit(): void {
-
+    // google.charts.load('current', {'packages':['corechart']});
+    // this.buildChart();
    }
 
   // public chartOptions:ChartOptions={
@@ -108,24 +114,27 @@ export class TickerComponent implements OnInit,AfterViewInit {
   //     }
   //  }
   ngOnInit(): void {
-    this.ticker=this.route.snapshot.params[':ticker']
+    this.ticker=this.route.snapshot.params['ticker'];
 
+
+      console.info("THIS TICKER>>" + this.ticker)
 
       this.candleSvc.getTickerCandles(this.ticker)
         .then((result)=>{
           this.result=result
           this.candlestick=result
             console.info(this.result); //console.info(this.candlestick.candle0);
-        }).catch(error => this.err=error)
+            console.info(this.candlestick.c, this.candlestick.t)
+          }).catch(error => this.err=error)
 
         google.charts.load('current', {'packages':['corechart']});
-        this.buildChart(this.candlestick);
+        this.buildChart();
     }
-    buildChart(c:candlestick){
+    buildChart(){
       var func = (chart:any) =>{
         var data = google.visualization.arrayToDataTable([
           [this.candlestick.t[0], Number(this.candlestick.l[0]), Number(this.candlestick.o[0]), Number(this.candlestick.c[0]), Number(this.candlestick.h[0])], //l o c h
-           [this.candlestick.t[1], Number(this.candlestick.l[1]), Number(this.candlestick.o[1]), Number(this.candlestick.c[1]), Number(this.candlestick.h[1])],
+          [this.candlestick.t[1], Number(this.candlestick.l[1]), Number(this.candlestick.o[1]), Number(this.candlestick.c[1]), Number(this.candlestick.h[1])],
           [this.candlestick.t[2], Number(this.candlestick.l[2]), Number(this.candlestick.o[2]), Number(this.candlestick.c[2]), Number(this.candlestick.h[2])],
           [this.candlestick.t[3], Number(this.candlestick.l[3]), Number(this.candlestick.o[3]), Number(this.candlestick.c[3]), Number(this.candlestick.h[3])],
           [this.candlestick.t[4], Number(this.candlestick.l[4]), Number(this.candlestick.o[4]), Number(this.candlestick.c[4]), Number(this.candlestick.h[4])],
@@ -137,9 +146,9 @@ export class TickerComponent implements OnInit,AfterViewInit {
           [this.candlestick.t[10], Number(this.candlestick.l[10]), Number(this.candlestick.o[10]), Number(this.candlestick.c[10]), Number(this.candlestick.h[10])],
           [this.candlestick.t[11], Number(this.candlestick.l[11]), Number(this.candlestick.o[11]), Number(this.candlestick.c[11]), Number(this.candlestick.h[11])],
           [this.candlestick.t[12], Number(this.candlestick.l[12]), Number(this.candlestick.o[12]), Number(this.candlestick.c[12]), Number(this.candlestick.h[12])],
-          [this.candlestick.t[12], Number(this.candlestick.l[13]), Number(this.candlestick.o[13]), Number(this.candlestick.c[13]), Number(this.candlestick.h[13])]
-          //[this.candlestick.t[14], Number(this.candlestick.l[14]), Number(this.candlestick.o[14]), Number(this.candlestick.c[14]), Number(this.candlestick.h[14])]
-          //[this.candlestick.t[15], Number(this.candlestick.l[15]), Number(this.candlestick.o[15]), Number(this.candlestick.c[15]), Number(this.candlestick.h[15])]
+          [this.candlestick.t[12], Number(this.candlestick.l[13]), Number(this.candlestick.o[13]), Number(this.candlestick.c[13]), Number(this.candlestick.h[13])],
+          [this.candlestick.t[14], Number(this.candlestick.l[14]), Number(this.candlestick.o[14]), Number(this.candlestick.c[14]), Number(this.candlestick.h[14])],
+          [this.candlestick.t[15], Number(this.candlestick.l[15]), Number(this.candlestick.o[15]), Number(this.candlestick.c[15]), Number(this.candlestick.h[15])]
           // ['Tasdue', 31, 38, 55, 66],
           // ['Weaasdd', 50, 55, 77, 80],
           // ['Thasdu', 77, 77, 66, 50],
@@ -148,7 +157,11 @@ export class TickerComponent implements OnInit,AfterViewInit {
         ], true);
 
         var options = {
-          legend:'none'
+          legend:'none',
+          candlestick: {
+            fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
+            risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
+          }
         };
         chart().draw(data, options);
       }
@@ -158,23 +171,23 @@ export class TickerComponent implements OnInit,AfterViewInit {
         google.charts.setOnLoadCallback(callback);
     }
 
-    drawChart(){
-      var data = google.visualization.arrayToDataTable([
-        ['Mon', 20, 28, 38, 45],
-        ['Tue', 31, 38, 55, 66],
-        ['Wed', 50, 55, 77, 80],
-        ['Thu', 77, 77, 66, 50],
-        ['Fri', 68, 66, 22, 15]
-        // Treat first row as data as well.
-      ], true);
+    // drawChart(){
+    //   var data = google.visualization.arrayToDataTable([
+    //     ['Mon', 20, 28, 38, 45],
+    //     ['Tue', 31, 38, 55, 66],
+    //     ['Wed', 50, 55, 77, 80],
+    //     ['Thu', 77, 77, 66, 50],
+    //     ['Fri', 68, 66, 22, 15]
+    //     // Treat first row as data as well.
+    //   ], true);
 
-      var options = {
-        legend:'none'
-      };
+    //   var options = {
+    //     legend:'none'
+    //   };
 
-      var chart = new google.visualization.CandlestickChart(document.getElementById('googleCandleStick'));
+    //   var chart = new google.visualization.CandlestickChart(document.getElementById('googleCandleStick'));
 
-      chart.draw(data, options);
-    }
+    //   chart.draw(data, options);
+    // }
 
 }

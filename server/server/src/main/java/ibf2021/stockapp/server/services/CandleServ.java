@@ -7,9 +7,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import ibf2021.stockapp.server.controllers.stockRestController;
 import ibf2021.stockapp.server.models.candle;
+import ibf2021.stockapp.server.models.Search;
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonArrayBuilder;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonObjectBuilder;
+import jakarta.json.JsonReader;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +35,8 @@ public class CandleServ {
 
 	private final String key;
 	private long period;
-
+	private String tickListResult;
+	private List<Search> searchList;
     public CandleServ() {
 		key = System.getenv(API_KEY_FINNHUB); //logger.info(key);
 
@@ -54,16 +67,54 @@ public class CandleServ {
 			.queryParam("to", Long.toString(unixNow))
 			.queryParam("token", key)
 			.toUriString();
-
+		logger.info(url);
 		final RequestEntity<Void> candleReq = RequestEntity.get(url).build();
 		final RestTemplate template = new RestTemplate();
 		final ResponseEntity<String> resp = template.exchange(candleReq, String.class); 
 				
 		candle c = candle.stringToJobjToCandle(resp.getBody());
 
+
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(c.toAngular(c));
 
 	}
 
+	public ResponseEntity<String> getSearchResults(String search){
+		
+		final String url = UriComponentsBuilder.fromUriString(FINNHUB_URL + "/search")
+			.queryParam("q", search)
+			.queryParam("token", key)
+			.toUriString();
+
+			final RequestEntity<Void> searchRequest = RequestEntity.get(url).build();
+			final RestTemplate template = new RestTemplate();
+			final ResponseEntity<String> resp = template.exchange(searchRequest, String.class); //need to remove count and result from the response.
+
+			
+			try{InputStream is = new ByteArrayInputStream(resp.getBody().getBytes());
+				final JsonReader reader = Json.createReader(is);
+                final JsonObject result = reader.readObject();
+                final JsonArray res = result.getJsonArray("result");
+				//tickListResult=res.toString();
+				searchList = res.stream()
+					.map(v->(JsonObject)v).map(Search::popSearchData).collect(Collectors.toList());
+					if(searchList.size()>5){
+						for (int i = searchList.size() - 1; i > 4; --i)
+  								searchList.remove(i);
+					}
+			}catch (Exception e) {
+                logger.error("error candleserv");}
+
+				JsonArrayBuilder ab = Json.createArrayBuilder();
+				JsonObjectBuilder b = Json.createObjectBuilder();
+					for(int i = 0; i<searchList.size() ;i++){
+						b.add("description", searchList.get(i).getDescription());
+						b.add("displaySymbol", searchList.get(i).getDisplaySymbol());
+						b.add("symbol", searchList.get(i).getSymbol());
+						b.add("type", searchList.get(i).getType());
+						ab.add(b);
+					}
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(ab.build().toString());
+	}
 	
 }

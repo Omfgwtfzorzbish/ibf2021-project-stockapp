@@ -2,22 +2,21 @@ package ibf2021.stockapp.server.models;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.cfg.ConstructorDetector.SingleArgConstructor;
+
 
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonObjectBuilder;
 import jakarta.json.JsonReader;
-import jakarta.json.JsonArray;
+
 import jakarta.json.JsonArrayBuilder;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 public class candle {
     String[] c;
@@ -27,7 +26,6 @@ public class candle {
     String[] t;
     String[] v;
     String s;
-    private final Logger logger = LoggerFactory.getLogger(candle.class);
 
     public String[] getC() {
         return this.c;
@@ -66,6 +64,12 @@ public class candle {
     }
 
     public void setT(String[] t) {
+       
+            for(int i = 0; i< t.length; i++){
+              Date d =  new Date(Long.valueOf(t[i])*1000);
+              DateFormat dF = new SimpleDateFormat("MM/dd/yyyy hh:mm: a");
+              t[i] = dF.format(d); 
+            }
         this.t = t;
     }
 
@@ -103,6 +107,7 @@ public class candle {
     }
 
     public static candle jsonToCandle(JsonObject o){
+      
         candle c = new candle();
             // List<String> listC = o.getJsonArray("c").stream().map(v->v.toString()).collect(Collectors.toList());
             // c.setC(listC.toArray(new String[0]));
@@ -134,9 +139,9 @@ public class candle {
     //                  }   
 
         
-        String singleCandle;
+        //String singleCandle;
             int numOfCandles = c.getT().length;
-            String[] data = new String[numOfCandles];
+            //String[] data = new String[numOfCandles];
 
             JsonObjectBuilder candles=Json.createObjectBuilder();
             JsonArrayBuilder time = Json.createArrayBuilder();

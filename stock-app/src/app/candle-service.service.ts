@@ -10,4 +10,9 @@ export class candleService{
   getTickerCandles(ticker:string):Promise<any>{
     return lastValueFrom(this.http.get<any>( `${URL_GET_CANDLSTICKS}/api/stock/${ticker}`))
   }
+
+  getSearchResults(search:string):Promise<any>{
+    const q = new HttpParams().set("q",search);
+    return lastValueFrom(this.http.get<any>(`${URL_GET_CANDLSTICKS}/api/search/ticklist`,{params: q}))
+  }
 }

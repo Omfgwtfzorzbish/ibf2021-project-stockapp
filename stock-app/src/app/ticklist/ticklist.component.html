@@ -1,1 +1,28 @@
-<p>ticklist works!</p>
+<p>Your Stock List</p>
+
+<form [formGroup]="form" (ngSubmit) = "processForm()">
+<mat-form-field>
+  <mat-label>Search Ticker:</mat-label>
+    <input type="text" placeholder="ticker or name" matInput formControlName="ticker"  >
+  </mat-form-field>
+  <div>
+    <button type="submit" mat-raised-button="primary">Search Stocks</button>
+  </div>
+  </form>
+
+  <!-- <li *ngFor="let tickentry of result">
+    <p>{{tickentry.description}}</p>
+    <p>{{tickentry.displaySymbol}}</p>
+    <p>{{tickentry.symbol}}</p>
+    <p>{{tickentry.type}}</p>
+  </li> -->
+
+<div *ngFor="let tickentry of result">
+  <mat-card>
+    <mat-card-content [routerLink]="['/api/stock', tickentry.symbol]">
+      <mat-card-title>{{tickentry.description}}</mat-card-title>
+      <mat-card-subtitle>Display Symbol: {{tickentry.displaySymbol}} Ticker: {{tickentry.symbol}}</mat-card-subtitle>
+      <mat-card-subtitle>Stock Type: {{tickentry.type}} </mat-card-subtitle>
+    </mat-card-content>
+  </mat-card>
+</div>

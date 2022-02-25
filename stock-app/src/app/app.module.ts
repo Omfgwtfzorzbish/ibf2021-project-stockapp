@@ -35,7 +35,8 @@ const appRoutes:Routes=[
     RouterModule,
     NgApexchartsModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(appRoutes),
+    FormsModule,ReactiveFormsModule,FlexLayoutModule
   ],
   providers: [candleService],
   bootstrap: [AppComponent]
