@@ -1,5 +1,11 @@
 package ibf2021.stockapp.server.models;
 
+import java.io.ByteArrayInputStream;
+
+import jakarta.json.Json;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+
 public class Login {
     String username;
     String password;
@@ -29,4 +35,14 @@ public class Login {
         this.password = password;
     }
  
+    public static Login create(String jsonString){
+        final Login l = new Login();
+           JsonReader r = Json.createReader(new ByteArrayInputStream(jsonString.getBytes()) );
+            JsonObject o = r.readObject();
+                try {l.username=o.getString("username");
+                l.password = o.getString("password");
+                l.email =o.getString("email");
+                } catch (Exception e) {    
+                }
+           return l;}
 }

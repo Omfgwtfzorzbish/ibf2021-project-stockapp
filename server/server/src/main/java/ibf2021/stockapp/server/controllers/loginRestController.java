@@ -6,18 +6,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.HttpClientErrorException.BadRequest;
 
 import ibf2021.stockapp.server.models.AuthRequest;
 import ibf2021.stockapp.server.models.Login;
 import ibf2021.stockapp.server.services.LoginServ;
-import ibf2021.stockapp.server.services.RepoServ;
 import ibf2021.stockapp.server.util.JwtUtil;
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
@@ -62,9 +58,21 @@ public class loginRestController {
             
        
     }
-    @GetMapping(path="/api/test")
-    public ResponseEntity<String> testJsonFilter(){
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body("TestSuccessful");
+    @PostMapping(path="/api/register", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> registerUser(@RequestBody String payload){
+        Login reg = null;   
+        try {
+            reg = Login.create(payload);   //create registration item
+            logger.info(payload);
+        }catch(Exception e){
+            JsonObject error = Json.createObjectBuilder()
+                .add("error", e.getMessage())
+                .build();
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error.toString());
+        }
+        loginServ.registerUser(reg);
+        JsonObject resp =Json.createObjectBuilder().add("resp","response").build();
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(resp.toString());
     }
     
 }

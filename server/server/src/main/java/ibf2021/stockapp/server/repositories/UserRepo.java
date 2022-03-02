@@ -39,4 +39,8 @@ public class UserRepo {
         return null;
     }
     
+    public void registerUser(Login reg){
+        template.update(SQL_REGISTER_USER, reg.getUsername(),reg.getPassword(),reg.getEmail());
+    }
+
 }

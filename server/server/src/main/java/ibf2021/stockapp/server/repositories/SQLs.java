@@ -9,13 +9,16 @@ public interface SQLs {
        //select count(*) user_count from user where password = "root";
        public static final String SQL_GET_USERNAME_RECORD = "select * from user where username = ?";
        //select count(*) user_count from user where password = "root";
+       public static final String SQL_REGISTER_USER = "insert into user(username,password,email) values (?,SHA2(?,256),?)";
+       // "insert into portfolio(username,ticker,date_added) values ("brian", "aapl", "2014-03-14");"
 }
 // select * from portfolio;
-// describe user;
-// insert into user (username,password,email) values ("brian","root","email");
-// insert into portfolio(username,ticker,date_added) values ("brian", "aapl", "2014-03-14");
-// select * from portfolio;
-// select * from user;
+//  describe user;
+//  insert into user (username,password,email) values ("brian",SHA2("root",256),"email");
+//  insert into portfolio(username,ticker,date_added) values ("brian", "aapl", "2014-03-14");
+//  select * from portfolio;
+//  select * from user;
 
-// select count(*) user_count from user where username = "brian";
-// select count(*) password_valid from user where password = "root";
+//  select count(*) user_count from user where username = "brian";
+//  select count(*) password_valid from user where password = "root";
+//  delete from user where username = "brian";

@@ -3,7 +3,7 @@ import { validateBasis } from '@angular/flex-layout';
 import { Form, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { candleService } from '../candle-service.service';
-import { user,loginStatus,token } from '../Model';
+import { user,loginStatus,token, registerUser } from '../Model';
 import { TokenStorageService } from '../token-storage.service';
 
 @Component({
@@ -13,9 +13,10 @@ import { TokenStorageService } from '../token-storage.service';
 })
 export class LoginComponent implements OnInit {
 
-  form!:FormGroup
+  form!:FormGroup; form2!:FormGroup
   token!:token
   isLoggedIn:boolean = false
+  showRegister:boolean = false
   isLogInFailed:string =''
   constructor(private fb:FormBuilder, private candleSvc:candleService,
     private router:Router, private tokenStorage: TokenStorageService) { }
@@ -24,6 +25,11 @@ export class LoginComponent implements OnInit {
     this.form=this.fb.group({
       username:this.fb.control('',[Validators.required]),
       //email:this.fb.control(['',Validators.email]),
+      password: this.fb.control('',[Validators.required,Validators.minLength(4)])
+    })
+    this.form2=this.fb.group({
+      username:this.fb.control('',[Validators.required]),
+      email:this.fb.control('',[Validators.email, Validators.required]),
       password: this.fb.control('',[Validators.required,Validators.minLength(4)])
     })
   }
@@ -36,8 +42,16 @@ export class LoginComponent implements OnInit {
       //localStorage.setItem('jwttoken',token)
       this.isLoggedIn=true;
       this.router.navigate(['/api/stock/ticklist'])
-    }).catch(error => {console.info(error); this.isLogInFailed = "invalid username or password"});
+    }).catch(error => {console.info(error); this.isLogInFailed = "invalid username or password"; this.showRegister=true});
+  }
 
+  processRegister(){
+    const userRegister = this.form2.value as registerUser;
+    this.candleSvc.registerUser(userRegister); window.location.reload()
+  }
+
+  registerButton(){
+    this.showRegister=true
   }
 
 }

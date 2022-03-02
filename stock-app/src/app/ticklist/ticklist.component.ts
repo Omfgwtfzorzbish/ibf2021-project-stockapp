@@ -62,7 +62,7 @@ export class TicklistComponent implements OnInit {
           this.result
           this.candleSvc.tickInfoToTickerComponent(this.result[i])
           this.router.navigate(['/api/stock',this.userSearch.ticker])
+        }
       }
     }
-  }
 }

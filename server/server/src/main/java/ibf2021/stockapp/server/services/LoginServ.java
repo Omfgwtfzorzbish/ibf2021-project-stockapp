@@ -30,10 +30,11 @@ public class LoginServ implements UserDetailsService{
         return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),new ArrayList<>());
     }
 
-    public Integer valUsernameAndPassword(Login loginInfo){
-        return userRepo.valUsernameAndPassword(loginInfo);
+    // public Integer valUsernameAndPassword(Login loginInfo){
+    //     return userRepo.valUsernameAndPassword(loginInfo);
+    // }
+
+    public void registerUser(Login reg){
+         userRepo.registerUser(reg);
     }
-
-    
-
 }
