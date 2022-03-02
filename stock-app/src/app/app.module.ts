@@ -16,8 +16,10 @@ import { candleService } from './candle-service.service';
 import { HttpClientModule } from '@angular/common/http';
 
 
+
+
 const appRoutes:Routes=[
-    {path:'' , component:LoginComponent},
+    {path:'login' , component:LoginComponent},
     {path:'api/stock/ticklist', component:TicklistComponent},
     {path: 'api/stock/:ticker', component:TickerComponent}
 ]

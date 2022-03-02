@@ -1,7 +1,7 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute,ParamMap } from '@angular/router';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute,ParamMap, Router } from '@angular/router';
 import { candleService } from '../candle-service.service';
-import { candlestick } from '../Model';
+import { candlestick, ticklist,stock } from '../Model';
 import {
   ChartComponent,
   ApexAxisChartSeries,
@@ -10,6 +10,7 @@ import {
   ApexXAxis,
   ApexTitleSubtitle
 } from "ng-apexcharts";
+import { Subscription } from 'rxjs';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -26,7 +27,7 @@ declare var google:any;
   templateUrl: './ticker.component.html',
   styleUrls: ['./ticker.component.css']
 })
-export class TickerComponent implements OnInit,AfterViewInit {
+export class TickerComponent implements OnInit,AfterViewInit,OnDestroy,AfterViewChecked,AfterContentInit {
   result:any;
   time0:any; candle0:any;
   candlestick!:candlestick;
@@ -35,11 +36,16 @@ export class TickerComponent implements OnInit,AfterViewInit {
   err:string='error';
   t0:string = '';
 
+  subscription!:Subscription;
+  tickerinfo!:ticklist;
+
+  addStock!:stock;
+
  // @ViewChild("chart") chart!:ChartComponent;
   public chartOptions!:ChartOptions;
 
 
-  constructor(private route:ActivatedRoute, private candleSvc:candleService) {
+  constructor(private route:ActivatedRoute, private candleSvc:candleService, private router:Router) {
     //console.info(this.candlestick.time0)
 
       //  google.charts.load('current', {'packages':['corechart']});
@@ -79,7 +85,11 @@ export class TickerComponent implements OnInit,AfterViewInit {
    }
    ngAfterViewInit(): void {
     // google.charts.load('current', {'packages':['corechart']});
-    // this.buildChart();
+     //this.buildChart();
+   }
+   ngAfterContentInit(): void {
+    //google.charts.load('current', {'packages':['corechart']});
+     //this.buildChart();
    }
 
   // public chartOptions:ChartOptions={
@@ -115,7 +125,10 @@ export class TickerComponent implements OnInit,AfterViewInit {
   //  }
   ngOnInit(): void {
     this.ticker=this.route.snapshot.params['ticker'];
-
+    this.subscription = this.candleSvc.getTickerInfo$.subscribe(
+      (tickerinfo:ticklist)=>{this.tickerinfo=tickerinfo
+      console.log('>>>SUBSCRIBABALE', this.tickerinfo)}
+    );
 
       console.info("THIS TICKER>>" + this.ticker)
 
@@ -127,8 +140,8 @@ export class TickerComponent implements OnInit,AfterViewInit {
             console.info(this.candlestick.c, this.candlestick.t)
           }).catch(error => this.err=error)
 
-        google.charts.load('current', {'packages':['corechart']});
-        this.buildChart();
+          google.charts.load('current', {'packages':['corechart']});
+         this.buildChart();
     }
     buildChart(){
       var func = (chart:any) =>{
@@ -169,6 +182,24 @@ export class TickerComponent implements OnInit,AfterViewInit {
       var callback=()=>func(chart);
         // Set a callback to run when the Google Visualization API is loaded.
         google.charts.setOnLoadCallback(callback);
+    }
+    ngAfterViewChecked(): void {
+
+     // this.buildChart();
+    }
+    ngOnDestroy() {
+      this.subscription.unsubscribe()
+    }
+    back(){
+      this.router.navigate(['/api/stock/ticklist'])
+    }
+
+    addToPort(){
+      this.addStock = {} as stock
+      this.addStock.ticker=this.ticker
+      console.info(this.ticker, this.addStock.ticker)
+      this.candleSvc.addToPortfolio(this.addStock)
+      this.router.navigate(['/api/stock/ticklist'])
     }
 
     // drawChart(){

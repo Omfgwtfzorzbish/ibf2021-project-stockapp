@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import ibf2021.stockapp.server.controllers.stockRestController;
+
 import ibf2021.stockapp.server.models.candle;
 import ibf2021.stockapp.server.models.Search;
 import jakarta.json.Json;
@@ -35,7 +35,7 @@ public class CandleServ {
 
 	private final String key;
 	private long period;
-	private String tickListResult;
+	//private String tickListResult;
 	private List<Search> searchList;
     public CandleServ() {
 		key = System.getenv(API_KEY_FINNHUB); //logger.info(key);
@@ -85,7 +85,7 @@ public class CandleServ {
 			.queryParam("q", search)
 			.queryParam("token", key)
 			.toUriString();
-
+			logger.info(url);
 			final RequestEntity<Void> searchRequest = RequestEntity.get(url).build();
 			final RestTemplate template = new RestTemplate();
 			final ResponseEntity<String> resp = template.exchange(searchRequest, String.class); //need to remove count and result from the response.

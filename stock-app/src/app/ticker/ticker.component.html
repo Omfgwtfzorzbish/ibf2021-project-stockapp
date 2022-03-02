@@ -1,5 +1,5 @@
 <p>ticker works!</p>
-<div id="chart">
+<!-- <div id="chart">
   <apx-chart
   [series]="chartOptions.series"
   [chart]="chartOptions.chart"
@@ -7,12 +7,17 @@
   [yaxis]="chartOptions.yaxis"
   [title]="chartOptions.title"
   ></apx-chart>
-</div>
-<div id="googleCandleStick">
+</div> -->
+  <mat-card >
+    <mat-card-title>{{tickerinfo.symbol}}</mat-card-title>
+      <mat-card-subtitle>{{tickerinfo.description}}</mat-card-subtitle>
+      <mat-card-content  id="googleCandleStick"></mat-card-content>
+  </mat-card>
 
-</div>
-<div>
-  <!-- {{candlestick?.time1}} {{candlestick?.candle1}} <br>
-  {{candlestick?.time2}} {{candlestick?.candle2}}<br>
-  {{candlestick?.time3}} {{candlestick?.candle3}}<br> -->
-</div>
+  <body>
+    <div id="chart_div" style="width: 900px; height: 500px;"></div>
+  </body>
+  <button type="button" mat-raised-button="primary" (click)="back()">back</button>
+
+
+  <button type="button" mat-raised-button="primary" (click)="addToPort()">Add to List</button>

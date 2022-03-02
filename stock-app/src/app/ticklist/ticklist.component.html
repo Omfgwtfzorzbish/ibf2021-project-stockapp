@@ -17,12 +17,18 @@
     <p>{{tickentry.type}}</p>
   </li> -->
 
-<div *ngFor="let tickentry of result">
-  <mat-card>
-    <mat-card-content [routerLink]="['/api/stock', tickentry.symbol]">
-      <mat-card-title>{{tickentry.description}}</mat-card-title>
-      <mat-card-subtitle>Display Symbol: {{tickentry.displaySymbol}} Ticker: {{tickentry.symbol}}</mat-card-subtitle>
-      <mat-card-subtitle>Stock Type: {{tickentry.type}} </mat-card-subtitle>
-    </mat-card-content>
-  </mat-card>
-</div>
+
+  <div *ngFor="let tickentry of result">
+    <mat-card>
+      <form [formGroup]="form2" (ngSubmit) = "selectTicker()">
+      <!-- <mat-card-content [routerLink]="['/api/stock', tickentry.symbol]"> -->
+        <mat-card-content>
+        <mat-card-title>{{tickentry.description}}</mat-card-title>
+        <mat-card-subtitle>Display Symbol: {{tickentry.displaySymbol}} Ticker: {{tickentry.symbol}}</mat-card-subtitle>
+        <mat-card-subtitle>Stock Type: {{tickentry.type}} </mat-card-subtitle>
+        <input type="text" value="{{tickentry.symbol}}" matInput formControlName="userSelection">
+        <button type="submit" mat-raised-button="primary">View {{tickentry.symbol}}</button>
+      </mat-card-content>
+    </form>
+    </mat-card>
+  </div>
