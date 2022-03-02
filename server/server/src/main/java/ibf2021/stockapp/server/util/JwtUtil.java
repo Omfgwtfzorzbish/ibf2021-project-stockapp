@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import ibf2021.stockapp.server.models.Login;
@@ -50,8 +51,8 @@ public class JwtUtil {
         .setExpiration(new Date(System.currentTimeMillis()+tokenValidity)).signWith(SignatureAlgorithm.HS256, jwtSecret).compact();
     }
 
-    public Boolean validateToken(String token, Login login){
+    public Boolean validateToken(String token, UserDetails userDetails){
         final String username = extractUsername(token);
-        return (username.equals(login.getUsername())&&!isTokenExpired(token));
+        return (username.equals(userDetails.getUsername())&&!isTokenExpired(token));
     }
 }
