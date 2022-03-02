@@ -11,6 +11,7 @@
     <div>
       <button type="submit" mat-raised-button="primary">Login</button>
     </div>
-    <mat-card-subtitle>{{loginStatus}}</mat-card-subtitle>
+    <mat-card-subtitle>{{isLogInFailed}}</mat-card-subtitle>
+    <mat-card-subtitle>{{token?.token}}</mat-card-subtitle>
     </form>
 </mat-card>

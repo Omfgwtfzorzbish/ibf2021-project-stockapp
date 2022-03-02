@@ -31,3 +31,6 @@ export interface user{
 export interface loginStatus{
   loginStatus:number
 }
+export interface token{
+  token:string
+}

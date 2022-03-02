@@ -11,6 +11,7 @@ import {
   ApexTitleSubtitle
 } from "ng-apexcharts";
 import { Subscription } from 'rxjs';
+import { TokenStorageService } from '../token-storage.service';
 
 export type ChartOptions = {
   series: ApexAxisChartSeries;
@@ -45,7 +46,7 @@ export class TickerComponent implements OnInit,AfterViewInit,OnDestroy,AfterView
   public chartOptions!:ChartOptions;
 
 
-  constructor(private route:ActivatedRoute, private candleSvc:candleService, private router:Router) {
+  constructor(private route:ActivatedRoute, private candleSvc:candleService, private router:Router,private tokenSvc:TokenStorageService) {
     //console.info(this.candlestick.time0)
 
       //  google.charts.load('current', {'packages':['corechart']});
@@ -132,16 +133,18 @@ export class TickerComponent implements OnInit,AfterViewInit,OnDestroy,AfterView
 
       console.info("THIS TICKER>>" + this.ticker)
 
-      this.candleSvc.getTickerCandles(this.ticker)
+      this.candleSvc.getTickerCandles(this.ticker,this.tokenSvc.getToken())
         .then((result)=>{
           this.result=result
           this.candlestick=result
             console.info(this.result); //console.info(this.candlestick.candle0);
             console.info(this.candlestick.c, this.candlestick.t)
+            google.charts.load('current', {'packages':['corechart']});
+            this.buildChart();
           }).catch(error => this.err=error)
 
-          google.charts.load('current', {'packages':['corechart']});
-         this.buildChart();
+        //   google.charts.load('current', {'packages':['corechart']});
+        //  this.buildChart();
     }
     buildChart(){
       var func = (chart:any) =>{

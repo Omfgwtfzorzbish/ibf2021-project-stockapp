@@ -2,22 +2,41 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from "rxjs";
 import { ticklist,stock,user} from './Model';
+import { TokenStorageService } from "./token-storage.service";
 
 const URL_GET_CANDLSTICKS = "http://localhost:8080"
+
+const httpOptions = {
+  headers: new HttpHeaders({'Content-Type':'application/json'})
+}
 @Injectable()
 export class candleService{
   tickinfo!:ticklist
+  token!:string|null
   onAdd$ = new BehaviorSubject<ticklist>(this.tickinfo)
-  getTickerInfo$ = this.onAdd$.asObservable();
-  constructor(private http:HttpClient){}
+  getTickerInfo$ = this.onAdd$.asObservable()
+  // token$ = new BehaviorSubject<string>(this.tokensub)
+  // getTokenInfo$ =this.token$.asObservable()
 
-  getTickerCandles(ticker:string):Promise<any>{
-    return lastValueFrom(this.http.get<any>( `${URL_GET_CANDLSTICKS}/api/stock/${ticker}`))
+  constructor(private http:HttpClient, private tokenSvc:TokenStorageService){}
+
+  getTickerCandles(ticker:string,token:string|null):Promise<any>{
+    if(typeof token === "string"){this.token=token;
+      console.info(this.token)} else{console.info("token is null")}
+    const p={
+      headers:new HttpHeaders(
+        {'Authorization': ('Bearer '+ this.token)})}
+    return lastValueFrom(this.http.get<any>( `${URL_GET_CANDLSTICKS}/api/stock/${ticker}`,p))
   }
 
-  getSearchResults(search:string):Promise<any>{
-    const q = new HttpParams().set("q",search);
-    return lastValueFrom(this.http.get<any>(`${URL_GET_CANDLSTICKS}/api/search/ticklist`,{params: q}))
+  getSearchResults(search:string,token:string|null):Promise<any>{
+    if(typeof token === "string"){this.token=token;
+      console.info(this.token)} else{console.info("token is null")}
+    const p={
+      headers:new HttpHeaders(
+        {'Authorization': ('Bearer '+ this.token)})}
+   // const q = new HttpParams().set("q",search);
+    return lastValueFrom(this.http.get<any>(`${URL_GET_CANDLSTICKS}/api/search/ticklist?q=`+search,p))
   }
 
   tickInfoToTickerComponent(ticklist:ticklist){
@@ -32,5 +51,13 @@ export class candleService{
   //send Login info to spring for validation.
   loginInfoToSpring(loginInf:user):Promise<any>{
     return lastValueFrom(this.http.post<any>(`${URL_GET_CANDLSTICKS}/api/login`, loginInf))
+    //return lastValueFrom(this.http.post<any>(`/api/login`, loginInf))
   }
+
+  //Broadcast token to all components
+  // tokenBroadcast(token:string){
+  //   this.tokensub=token
+  //   this.token$.next(this.tokensub)
+  // }
+
 }

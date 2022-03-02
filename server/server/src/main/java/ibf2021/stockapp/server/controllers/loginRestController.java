@@ -44,9 +44,8 @@ public class loginRestController {
     @PostMapping(path="/api/login" ,consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> getUserLoginInput(@RequestBody AuthRequest authRequest) throws Exception{
 
-        Login login= new Login(); login.setPassword("root"); login.setEmail("email");login.setUsername("brian");
-        int i = loginServ.valUsernameAndPassword(login); System.out.println("VALIDATE:>> " + Integer.toString(i));
-       
+        // Login login= new Login(); login.setPassword("root"); login.setEmail("email");login.setUsername("brian");
+        // int i = loginServ.valUsernameAndPassword(login); System.out.println("VALIDATE:>> " + Integer.toString(i));
         try{
             System.out.println(authRequest.getPassword()+ authRequest.getUsername());
         //only generates a token if password and username are correct
@@ -57,9 +56,9 @@ public class loginRestController {
         String token = jwtUtil.generateToken(authRequest.getUsername());
        logger.info(token);
 
-     
+        JsonObject o = Json.createObjectBuilder().add("token", token).build();
 
-        return ResponseEntity.status(HttpStatus.ACCEPTED).body(token);
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(o.toString());
             
        
     }

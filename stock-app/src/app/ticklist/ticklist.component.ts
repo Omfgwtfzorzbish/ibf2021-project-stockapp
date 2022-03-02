@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { candleService } from '../candle-service.service';
+import { TokenStorageService } from '../token-storage.service';
 import { ticklist } from '../Model';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
@@ -23,7 +24,8 @@ export class TicklistComponent implements OnInit {
   singleTicker!:ticklist
   err!:string
 
-  constructor(private route:ActivatedRoute, private candleSvc:candleService, private fb:FormBuilder,private router:Router) { }
+  constructor(private route:ActivatedRoute, private candleSvc:candleService,
+    private fb:FormBuilder,private router:Router, private tokenSvc:TokenStorageService) { }
 
   ngOnInit(): void {
     // this.route.queryParams.subscribe(   //use routerlink on page to navigate and find stuff
@@ -31,9 +33,6 @@ export class TicklistComponent implements OnInit {
     // )
     this.form = this.createForm();
     this.form2 = this.createForm2();
-
-
-
 
   }
     createForm():FormGroup{
@@ -49,7 +48,7 @@ export class TicklistComponent implements OnInit {
 
     processForm(){
       this.userSearch = this.form.value
-      this.candleSvc.getSearchResults(this.userSearch.ticker.toLowerCase())
+      this.candleSvc.getSearchResults(this.userSearch.ticker.toLowerCase(),this.tokenSvc.getToken()) //this.tokenSvc.getToken()
       // returns ticklist[] of tickers and info
       .then(result => {this.result=result,
         console.info(this.result)}

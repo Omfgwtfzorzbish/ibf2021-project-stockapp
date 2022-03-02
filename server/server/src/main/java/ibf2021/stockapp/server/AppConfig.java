@@ -9,6 +9,8 @@ public class AppConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry reg) {
-		reg.addMapping("/api/**");
+		reg.addMapping("/api/**").allowedHeaders("*").allowedOriginPatterns("*").allowedMethods("*")
+		.allowCredentials(true);
 	}
+
 }

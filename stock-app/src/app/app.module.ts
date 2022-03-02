@@ -14,6 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { candleService } from './candle-service.service';
 import { HttpClientModule } from '@angular/common/http';
+import { TokenStorageService } from './token-storage.service';
 
 
 
@@ -40,7 +41,7 @@ const appRoutes:Routes=[
     RouterModule.forRoot(appRoutes),
     FormsModule,ReactiveFormsModule,FlexLayoutModule
   ],
-  providers: [candleService],
+  providers: [candleService,TokenStorageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
