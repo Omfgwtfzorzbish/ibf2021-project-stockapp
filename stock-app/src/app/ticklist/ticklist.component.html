@@ -10,13 +10,6 @@
   </div>
   </form>
 
-  <!-- <li *ngFor="let tickentry of result">
-    <p>{{tickentry.description}}</p>
-    <p>{{tickentry.displaySymbol}}</p>
-    <p>{{tickentry.symbol}}</p>
-    <p>{{tickentry.type}}</p>
-  </li> -->
-
 
   <div *ngFor="let tickentry of result">
     <mat-card>
@@ -32,3 +25,14 @@
     </form>
     </mat-card>
   </div>
+
+<mat-card>
+  <mat-card-header>Your Portfolio</mat-card-header>
+  <mat-list *ngFor="let p of userPortfolio">
+    <mat-card>
+      <mat-list-item>Owner: {{p.username}}</mat-list-item>
+      <mat-list-item>Ticker: {{p.ticker}}</mat-list-item>
+      <mat-list-item>Date Added: {{p.date_added}}</mat-list-item>
+    </mat-card>
+  </mat-list>
+</mat-card>

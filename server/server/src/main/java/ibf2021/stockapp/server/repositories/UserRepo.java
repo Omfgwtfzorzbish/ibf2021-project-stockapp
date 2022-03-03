@@ -6,8 +6,12 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import ibf2021.stockapp.server.models.Login;
+import ibf2021.stockapp.server.models.portfolioItem;
 
 import static ibf2021.stockapp.server.repositories.SQLs.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class UserRepo {
@@ -43,4 +47,19 @@ public class UserRepo {
         template.update(SQL_REGISTER_USER, reg.getUsername(),reg.getPassword(),reg.getEmail());
     }
 
+    public List<portfolioItem> getPortfolio(String username){
+        System.out.println("FROM USERREPO USERNAE>>" + username);
+            final SqlRowSet rs = template.queryForRowSet(SQL_GET_PORTFOLIO_BY_USERNAME,username);
+           List<portfolioItem> portfolio = new ArrayList<portfolioItem>();
+                while(rs.next())
+                    {portfolioItem item = new portfolioItem();
+                        item.setUsername(rs.getString("username"));
+                        item.setTicker(rs.getString("ticker"));
+                        //item.setPrice(rs.getFloat("price"));
+                        //item.setPosition(rs.getInt("positon"));
+                        item.setDate_added(rs.getDate("date_added"));
+                        portfolio.add(item);
+                    }
+            return portfolio;
+    }
 }

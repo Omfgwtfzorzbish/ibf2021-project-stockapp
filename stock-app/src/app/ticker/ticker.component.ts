@@ -201,7 +201,7 @@ export class TickerComponent implements OnInit,AfterViewInit,OnDestroy,AfterView
       this.addStock = {} as stock
       this.addStock.ticker=this.ticker
       console.info(this.ticker, this.addStock.ticker)
-      this.candleSvc.addToPortfolio(this.addStock, this.tokenSvc.getToken())
+      this.candleSvc.addToPortfolio(this.addStock, this.tokenSvc.getToken(),this.tokenSvc.getUser())
       this.router.navigate(['/api/stock/ticklist'])
     }
 

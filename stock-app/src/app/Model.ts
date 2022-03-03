@@ -20,6 +20,7 @@ export interface searchForm{
 
 export interface stock{
   ticker:string
+  username:string
 }
 
 export interface user{
@@ -38,4 +39,10 @@ export interface loginStatus{
 }
 export interface token{
   token:string
+}
+
+export interface portfolioItem{
+  ticker:string
+  username:string
+  date_added:string
 }

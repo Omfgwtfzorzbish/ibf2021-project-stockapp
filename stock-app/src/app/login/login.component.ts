@@ -38,7 +38,7 @@ export class LoginComponent implements OnInit {
    const userLogin =this.form.value as user;
     this.candleSvc.loginInfoToSpring(userLogin).then(token => {this.token=token;
       console.info(this.token.token);
-      this.tokenStorage.saveToken(this.token.token);
+      this.tokenStorage.saveToken(this.token.token,userLogin.username);
       //localStorage.setItem('jwttoken',token)
       this.isLoggedIn=true;
       this.router.navigate(['/api/stock/ticklist'])

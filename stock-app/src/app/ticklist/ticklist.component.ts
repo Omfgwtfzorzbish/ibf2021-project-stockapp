@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { candleService } from '../candle-service.service';
 import { TokenStorageService } from '../token-storage.service';
-import { ticklist } from '../Model';
+import { portfolioItem, ticklist,user } from '../Model';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -24,6 +24,8 @@ export class TicklistComponent implements OnInit {
   singleTicker!:ticklist
   err!:string
 
+  userPortfolio:portfolioItem[]=[]
+  user!:user
   constructor(private route:ActivatedRoute, private candleSvc:candleService,
     private fb:FormBuilder,private router:Router, private tokenSvc:TokenStorageService) { }
 
@@ -31,8 +33,15 @@ export class TicklistComponent implements OnInit {
     // this.route.queryParams.subscribe(   //use routerlink on page to navigate and find stuff
     //   params => {this.search=params['q']}
     // )
+    this.user={} as user
+    this.candleSvc.getPortfolio(this.user,this.tokenSvc.getUser(),this.tokenSvc.getToken())
+    .then(portfolio=>{
+      this.userPortfolio=portfolio;console.log(this.userPortfolio[0].date_added)
+    }).catch(error =>{console.info(error) ;this.err=error});
+
     this.form = this.createForm();
     this.form2 = this.createForm2();
+
 
   }
     createForm():FormGroup{
@@ -65,4 +74,5 @@ export class TicklistComponent implements OnInit {
         }
       }
     }
+
 }

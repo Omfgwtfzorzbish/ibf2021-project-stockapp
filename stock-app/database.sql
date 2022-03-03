@@ -17,3 +17,5 @@ primary key(ticker),
 	constraint fk_username
 		foreign key (username)
 			references user(username));
+
+

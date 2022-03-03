@@ -16,9 +16,9 @@ public class PortfolioRepo {
     private JdbcTemplate template;
 
     public String insertPortfolioItem(portfolioItem item){
-        template.update(SQL_ADD_PORFOLIOITEM, "brian",item.getTicker(),item.getDate_added());
-
-
+        System.out.println("FROM INSER PORT "+ item.getUsername());
+        template.update(SQL_ADD_PORFOLIOITEM, item.getUsername(),item.getTicker(),item.getDate_added());
+       
         return item.getDate_added().toString();
     }
 }

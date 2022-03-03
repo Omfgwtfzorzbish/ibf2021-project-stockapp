@@ -52,11 +52,20 @@ public class portfolioItem {
                 try {p.ticker=o.getString("ticker");
                 Date date = new Date();
                 p.date_added = date;
-                p.username ="test_username";
+                p.username =o.getString("username");
                 } catch (Exception e) {
                     
                 }
            return p;
    }
+
+   public JsonObject toJson() {
+    return Json.createObjectBuilder()
+        .add("ticker", ticker)
+        .add("username", username)
+        .add("date_added", date_added.toString())
+        //.add("position", Integer.toString(position))
+        .build();
+}
 
 }

@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.config.web.server.ServerHttpSecurity.HttpsRedirectSpec;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,14 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 import ibf2021.stockapp.server.models.portfolioItem;
 import ibf2021.stockapp.server.services.CandleServ;
 import ibf2021.stockapp.server.services.RepoServ;
+
 import jakarta.json.Json;
+import jakarta.json.JsonArrayBuilder;
 import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+import java.io.ByteArrayInputStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RestController
-@RequestMapping(path="/api/portfolio")
+@RequestMapping(path="/api")
 public class portfolioRestController {
     private final Logger logger = LoggerFactory.getLogger(portfolioRestController.class);
     @Autowired
@@ -28,7 +33,7 @@ public class portfolioRestController {
     @Autowired
     private RepoServ repoServ;
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(path="portfolio" ,consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String> postTicker(@RequestBody String payload){
         portfolioItem addstock = null;
         try {
@@ -45,5 +50,20 @@ public class portfolioRestController {
         logger.info("PAYLOAD >> ",payload);
 
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(resp.toString());
+    }
+
+    @PostMapping(path="stock/ticklist/getport", consumes= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> getPortfolio(@RequestBody String payload){
+        String username="";
+        JsonReader r = Json.createReader(new ByteArrayInputStream(payload.getBytes()) );
+            JsonObject o = r.readObject();
+                try {username=o.getString("username");} catch (Exception e) {}
+
+            JsonArrayBuilder ab =Json.createArrayBuilder();
+            repoServ.getPortfolio(username).stream()
+                .forEach(p -> ab.add(p.toJson()));
+                String p =ab.build().toString();
+        System.out.println("FROM POSTMAP GET PORT>> "+p);
+        return ResponseEntity.ok(p);
     }
 }
