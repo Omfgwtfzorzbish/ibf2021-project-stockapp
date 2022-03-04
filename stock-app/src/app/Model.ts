@@ -46,3 +46,8 @@ export interface portfolioItem{
   username:string
   date_added:string
 }
+
+export interface delStock{
+  delTicker:string
+  delUsername:string
+}

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -34,6 +36,9 @@ public class loginRestController {
 
     @Autowired
     private AuthenticationManager auth;
+
+    @Autowired
+    private JavaMailSender mailer;
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -71,7 +76,15 @@ public class loginRestController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error.toString());
         }
         loginServ.registerUser(reg);
-        JsonObject resp =Json.createObjectBuilder().add("resp","response").build();
+
+            SimpleMailMessage regMail = new SimpleMailMessage();
+                regMail.setFrom("stockapp92@gmail.com");
+                regMail.setTo(reg.getEmail());
+                regMail.setSubject("Subject : You have registered for STOCKAPP");
+                regMail.setText("Body : Thank You, Have a great day");
+                mailer.send(regMail);
+
+        JsonObject resp =Json.createObjectBuilder().add("resp","Registration Mail Sent").build();
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(resp.toString());
     }
     

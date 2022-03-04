@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import ibf2021.stockapp.server.models.DelRequest;
 import ibf2021.stockapp.server.models.portfolioItem;
 
 import static ibf2021.stockapp.server.repositories.SQLs.*;
@@ -20,5 +21,11 @@ public class PortfolioRepo {
         template.update(SQL_ADD_PORFOLIOITEM, item.getUsername(),item.getTicker(),item.getDate_added());
        
         return item.getDate_added().toString();
+    }
+
+    public String delStock(DelRequest item){
+        
+        template.update(SQL_DELETE_FROM_PORTFOLIO, item.getUsername(),item.getTicker());
+        return item.getTicker()+ " has been deleted";
     }
 }

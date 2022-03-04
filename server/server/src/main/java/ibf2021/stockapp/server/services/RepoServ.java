@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import ibf2021.stockapp.server.models.DelRequest;
 import ibf2021.stockapp.server.models.portfolioItem;
 import ibf2021.stockapp.server.repositories.PortfolioRepo;
 import ibf2021.stockapp.server.repositories.UserRepo;
@@ -24,6 +25,10 @@ public class RepoServ {
     public String insertStock(portfolioItem item){
            return portRepo.insertPortfolioItem(item);
     }
+
+    public String delStock(DelRequest item){
+        return portRepo.delStock(item);
+ }
 
     public List<portfolioItem> getPortfolio(String username){
         return userRepo.getPortfolio(username);

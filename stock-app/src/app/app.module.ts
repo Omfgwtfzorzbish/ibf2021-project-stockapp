@@ -16,13 +16,11 @@ import { candleService } from './candle-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { TokenStorageService } from './token-storage.service';
 
-
-
-
 const appRoutes:Routes=[
     {path:'login' , component:LoginComponent},
     {path:'api/stock/ticklist', component:TicklistComponent},
-    {path: 'api/stock/:ticker', component:TickerComponent}
+    {path: 'api/stock/:ticker', component:TickerComponent},
+    { path: '**', redirectTo: '/login', pathMatch: 'full' }
 ]
 @NgModule({
   declarations: [

@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { BehaviorSubject, lastValueFrom } from "rxjs";
-import { ticklist,stock,user, registerUser, portfolioItem} from './Model';
+import { ticklist,stock,user, registerUser, portfolioItem, delStock} from './Model';
 import { TokenStorageService } from "./token-storage.service";
 
 const URL_GET_CANDLSTICKS = "http://localhost:8080"
@@ -72,5 +72,14 @@ export class candleService{
         headers:new HttpHeaders(
           {'Authorization': ('Bearer '+ this.token)})}
     return lastValueFrom(this.http.post<portfolioItem[]>(`api/stock/ticklist/getport`, user,p))
+  }
+  delStock(delstock:portfolioItem, token:string|null):Promise<any>{
+    if(typeof token === "string"){this.token=token;
+      console.info(this.token)} else{console.info("token is null")}
+      const p={
+        headers:new HttpHeaders(
+          {'Authorization': ('Bearer '+ this.token)})}
+          console.info(delstock.ticker,delstock.username)
+          return lastValueFrom(this.http.post<any>(`api/stock/ticklist/delete`, delstock,p))
   }
 }

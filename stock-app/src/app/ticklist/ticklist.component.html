@@ -11,28 +11,27 @@
   </form>
 
 
-  <div *ngFor="let tickentry of result">
+  <div *ngFor="let tickentry of result; let i = index">
     <mat-card>
-      <form [formGroup]="form2" (ngSubmit) = "selectTicker()">
-      <!-- <mat-card-content [routerLink]="['/api/stock', tickentry.symbol]"> -->
         <mat-card-content>
         <mat-card-title>{{tickentry.description}}</mat-card-title>
         <mat-card-subtitle>Display Symbol: {{tickentry.displaySymbol}} Ticker: {{tickentry.symbol}}</mat-card-subtitle>
         <mat-card-subtitle>Stock Type: {{tickentry.type}} </mat-card-subtitle>
-        <input type="text" value="{{tickentry.symbol}}" matInput formControlName="userSelection">
-        <button type="submit" mat-raised-button="primary">View {{tickentry.symbol}}</button>
+        <button type="button" mat-raised-button="primary" (click)="selectTicker(i)">View {{tickentry.symbol}}</button>
       </mat-card-content>
-    </form>
+
     </mat-card>
   </div>
 
 <mat-card>
   <mat-card-header>Your Portfolio</mat-card-header>
-  <mat-list *ngFor="let p of userPortfolio">
+  <mat-list *ngFor="let p of userPortfolio; let i = index">
     <mat-card>
       <mat-list-item>Owner: {{p.username}}</mat-list-item>
       <mat-list-item>Ticker: {{p.ticker}}</mat-list-item>
       <mat-list-item>Date Added: {{p.date_added}}</mat-list-item>
+      <button type="button" mat-raised-button="warn" (click)="deleteStock(i)">Delete</button>
     </mat-card>
   </mat-list>
 </mat-card>
+<button type="button" mat-raised-button="primary" (click)="refresh()">Refresh Portfolio</button>

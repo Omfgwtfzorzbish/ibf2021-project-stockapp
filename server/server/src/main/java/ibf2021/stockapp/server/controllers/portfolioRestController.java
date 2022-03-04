@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import ibf2021.stockapp.server.models.DelRequest;
 import ibf2021.stockapp.server.models.portfolioItem;
 import ibf2021.stockapp.server.services.CandleServ;
 import ibf2021.stockapp.server.services.RepoServ;
@@ -65,5 +66,18 @@ public class portfolioRestController {
                 String p =ab.build().toString();
         System.out.println("FROM POSTMAP GET PORT>> "+p);
         return ResponseEntity.ok(p);
+    }
+
+    @PostMapping(path="stock/ticklist/delete", consumes= MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<String> delStock(@RequestBody String payload){
+        DelRequest delStock =new DelRequest();
+        JsonReader r = Json.createReader(new ByteArrayInputStream(payload.getBytes()) );
+            JsonObject o = r.readObject();
+                try {delStock.setUsername(o.getString("username"));
+                    delStock.setTicker(o.getString("ticker"));
+                    System.out.println("FRom delSTOCK " + delStock.getTicker() + delStock.getUsername());
+            } catch (Exception e) {e.printStackTrace();}
+            String s = repoServ.delStock(delStock);
+        return ResponseEntity.ok(Json.createObjectBuilder().add("resp", s).build().toString());
     }
 }
