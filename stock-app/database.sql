@@ -14,7 +14,7 @@ ticker char(10) not null,
 price float,
 position int,
 date_added date not null,
-primary key(ticker),
+primary key(entry_num),
 	constraint fk_username
 		foreign key (username)
 			references user(username));
