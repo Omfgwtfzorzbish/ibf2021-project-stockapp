@@ -34,6 +34,7 @@
       </mat-form-field><br>
       <div>
         <button type="submit" [disabled]="!form2.valid" mat-raised-button="primary">Register</button>
+        <button type="button"  mat-raised-button="primary" (click)="toLogin()">Back to Login</button>
       </div>
       <mat-card-subtitle>{{isLogInFailed}}</mat-card-subtitle>
       <mat-card-subtitle>{{token?.token}}</mat-card-subtitle>

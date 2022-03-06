@@ -47,11 +47,16 @@ export class LoginComponent implements OnInit {
 
   processRegister(){
     const userRegister = this.form2.value as registerUser;
-    this.candleSvc.registerUser(userRegister); window.location.reload()
+    this.candleSvc.registerUser(userRegister);
+    this.showRegister=false
+    //window.location.reload();
   }
 
   registerButton(){
     this.showRegister=true
+  }
+  toLogin(){
+    this.showRegister=false
   }
 
 }
