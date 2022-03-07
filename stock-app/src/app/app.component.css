@@ -1,0 +1,10 @@
+.content{
+  margin:auto;
+  width:80%;
+  padding:20px;
+  position:center;
+}
+.toolbar{
+  margin:auto;
+  background-color: lightskyblue;
+}
