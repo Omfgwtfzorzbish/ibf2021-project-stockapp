@@ -1,37 +1,40 @@
 <p>Your Stock List</p>
 
+<mat-card class="matcard1">
 <form [formGroup]="form" (ngSubmit) = "processForm()">
 <mat-form-field>
   <mat-label>Search Ticker:</mat-label>
     <input type="text" placeholder="ticker or name" matInput formControlName="ticker"  >
   </mat-form-field>
   <div>
-    <button type="submit" mat-raised-button="primary">Search Stocks</button>
+    <button type="submit" mat-raised-button="primary" mat-button color="primary" >Search Stocks</button>
   </div>
   </form>
-
+</mat-card>
+<mat-divider></mat-divider>
 
   <div *ngFor="let tickentry of result; let i = index">
-    <mat-card>
+    <mat-card class="matcard1" >
         <mat-card-content>
         <mat-card-title>{{tickentry.description}}</mat-card-title>
         <mat-card-subtitle>Display Symbol: {{tickentry.displaySymbol}} Ticker: {{tickentry.symbol}}</mat-card-subtitle>
         <mat-card-subtitle>Stock Type: {{tickentry.type}} </mat-card-subtitle>
-        <button type="button" mat-raised-button="primary" (click)="selectTicker(i)">View {{tickentry.symbol}}</button>
+        <button type="button" mat-raised-button="primary"  mat-button color="primary" (click)="selectTicker(i)">View {{tickentry.symbol}}</button>
       </mat-card-content>
-
     </mat-card>
+    <mat-divider></mat-divider>
   </div>
 
-<mat-card>
-  <mat-card-header>Your Portfolio</mat-card-header>
+<mat-card class="matcard1">
+  <mat-card-header style="font-size: larger; font-weight: bolder; font-family: Verdana, Geneva, Tahoma, sans-serif;">Your Portfolio</mat-card-header>
   <mat-list *ngFor="let p of userPortfolio; let i = index">
-    <mat-card>
+    <mat-card class="goldcard">
       <mat-list-item>Owner: {{p.username}}</mat-list-item>
       <mat-list-item>Ticker: {{p.ticker}}</mat-list-item>
       <mat-list-item>Date Added: {{p.date_added}}</mat-list-item>
-      <button type="button" mat-raised-button="warn" (click)="deleteStock(i)">Delete</button>
+      <button type="button" mat-raised-button="warn" mat-button color="warn" (click)="deleteStock(i)">Delete</button>
     </mat-card>
+    <mat-divider></mat-divider>
   </mat-list>
 </mat-card>
-<button type="button" mat-raised-button="primary" (click)="refresh()">Refresh Portfolio</button>
+<button type="button" mat-raised-button="primary" mat-button color="primary" (click)="refresh()">Refresh Portfolio</button>

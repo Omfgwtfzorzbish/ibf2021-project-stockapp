@@ -15,6 +15,8 @@ import { NgApexchartsModule } from 'ng-apexcharts';
 import { candleService } from './candle-service.service';
 import { HttpClientModule } from '@angular/common/http';
 import { TokenStorageService } from './token-storage.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const appRoutes:Routes=[
     {path:'login' , component:LoginComponent},
@@ -37,7 +39,12 @@ const appRoutes:Routes=[
     NgApexchartsModule,
     HttpClientModule,
     RouterModule.forRoot(appRoutes),
-    FormsModule,ReactiveFormsModule,FlexLayoutModule
+    FormsModule,ReactiveFormsModule,FlexLayoutModule, ServiceWorkerModule.register('ngsw-worker.js', {
+  enabled: environment.production,
+  // Register the ServiceWorker as soon as the app is stable
+  // or after 30 seconds (whichever comes first).
+  registrationStrategy: 'registerWhenStable:30000'
+})
   ],
   providers: [candleService,TokenStorageService],
   bootstrap: [AppComponent]

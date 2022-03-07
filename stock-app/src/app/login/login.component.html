@@ -1,4 +1,4 @@
-<mat-card *ngIf="!showRegister">
+<mat-card *ngIf="!showRegister" class="matcard1">
 <form [formGroup]="form" (ngSubmit) = "processForm()">
     <mat-form-field>
       <mat-label>Username: </mat-label>
@@ -10,15 +10,15 @@
     </mat-form-field><br>
     <span>
     <div>
-      <button type="submit" [disabled]="!form.valid" mat-raised-button="primary">Login</button>
-      <button type="button" mat-raised-button="primary" (click)="registerButton()">Register</button>
+      <button type="submit" [disabled]="!form.valid" mat-raised-button="primary" mat-button color="primary">Login</button>
+      <button type="button" mat-raised-button="primary" mat-button color="accent" (click)="registerButton()">Register</button>
     </div>
   </span>
     <mat-card-subtitle>{{isLogInFailed}}</mat-card-subtitle>
     <mat-card-subtitle>{{token?.token}}</mat-card-subtitle>
     </form>
 </mat-card>
-<mat-card *ngIf="showRegister">
+<mat-card *ngIf="showRegister" class="matcard1">
   <form [formGroup]="form2" (ngSubmit) = "processRegister()">
       <mat-form-field>
         <mat-label>Username: </mat-label>
@@ -33,8 +33,8 @@
         <input type="text" placeholder="email" matInput formControlName="email" >
       </mat-form-field><br>
       <div>
-        <button type="submit" [disabled]="!form2.valid" mat-raised-button="primary">Register</button>
-        <button type="button"  mat-raised-button="primary" (click)="toLogin()">Back to Login</button>
+        <button type="submit" [disabled]="!form2.valid" mat-raised-button="accent">Register</button>
+        <button type="button"  mat-raised-button="primary" mat-button color="primary" (click)="toLogin()">Back to Login</button>
       </div>
       <mat-card-subtitle>{{isLogInFailed}}</mat-card-subtitle>
       <mat-card-subtitle>{{token?.token}}</mat-card-subtitle>

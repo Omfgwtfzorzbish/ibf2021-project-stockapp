@@ -1,17 +1,17 @@
-<mat-toolbar class="toolbar" color="primary">
+<mat-toolbar class="toolbar">
   <mat-toolbar-row></mat-toolbar-row>
   <mat-toolbar-row>
     <span class="mat-display-3">My Stock App</span>
   </mat-toolbar-row>
 </mat-toolbar>
 
-<div class="content">
+<div class="background" fxFlexFill
+fxLayout="row wrap"
+fxLayout.xs="column wrap"
+fxLayout.sm="column wrap"
+fxLayoutGap="15px grid">
     <div>
-      <div fxFlexFill
-      fxLayout="row wrap"
-      fxLayout.xs="column wrap"
-      fxLayout.sm="column wrap"
-      fxLayoutGap="15px grid">
+      <div class="content">
         <router-outlet></router-outlet>
       </div>
   <!-- </div> -->

@@ -1,0 +1,8 @@
+How to deploy
+1. copy stock-app/dist/stock-app into server/server/src/main/resources/static
+2. deploy server with copied dist files to heroku remote repo
+
+3.Env Variables used API_KEY_FINNHUB = your api key
+			SPRING_DATASOURCE_PASSWORD = your sql user password
+
+4 sql schema can be found in stock-app/database.sql

@@ -8,16 +8,15 @@
   [title]="chartOptions.title"
   ></apx-chart>
 </div> -->
-  <mat-card >
+  <mat-card style="background-color:goldenrod;">
     <mat-card-title>{{tickerinfo.symbol}}</mat-card-title>
       <mat-card-subtitle>{{tickerinfo.description}}</mat-card-subtitle>
       <mat-card-content  id="googleCandleStick"></mat-card-content>
   </mat-card>
 
   <body>
-    <div id="chart_div" style="width:1500px; height: 500px;"></div>
+    <div id="chart_div" style="width:1500px; height: 500px;">
+    <button type="button" mat-raised-button="primary" mat-button color="primary" (click)="back()">back</button>
+    <button type="button" mat-raised-button="primary" mat-button color="accent" (click)="addToPort()">Add to List</button>
+    </div>
   </body>
-  <button type="button" mat-raised-button="primary" (click)="back()">back</button>
-
-
-  <button type="button" mat-raised-button="primary" (click)="addToPort()">Add to List</button>

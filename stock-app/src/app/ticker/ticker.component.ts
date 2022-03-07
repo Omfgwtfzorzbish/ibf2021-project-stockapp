@@ -174,6 +174,7 @@ export class TickerComponent implements OnInit,AfterViewInit,OnDestroy,AfterView
 
         var options = {
           legend:'none',
+          backgroundColor:'lightyellow',
           candlestick: {
             fallingColor: { strokeWidth: 0, fill: '#a52714' }, // red
             risingColor: { strokeWidth: 0, fill: '#0f9d58' }   // green
